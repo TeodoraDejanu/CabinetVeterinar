@@ -1,0 +1,245 @@
+﻿@model CabinetVeterinar.Models.Utilizator
+<div class="modal-dialog" data-backdrop="static"  style="width:1350px;">
+    <div class="modal-content">
+        @using (Html.BeginForm("Edit", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel">Editare client</h4>
+            </div>
+            <div class="modal-body" id="add_area_wrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="form-horizontal">
+                            <hr />
+                            @Html.HiddenFor(model => model.Id_utilizator)
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Parola, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Parola, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Parola, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Nume, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Nume, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Nume, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Prenume, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Prenume, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Prenume, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Telefon, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Telefon, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Telefon, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <h4>Animale detinute</h4>
+                            <div id="parti" class="panel panel-default">
+                                <div id="parti" class="panel panel-default">
+                                    <table id="tblAnimale" class="table" cellpadding="0" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:150px">Categorie</th>
+                                                <th style="width:150px">Rasa</th>
+                                                <th style="width:150px">Nume</th>
+                                                <th style="width:150px">Gen</th>
+                                                <th style="width:150px">Varsta</th>
+                                                <th style="width:150px">Greutate</th>
+                                                <th style="width:150px">Caracteristici</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (CabinetVeterinar.Models.Animal item in Model.Animale)
+                                            {
+                                            <tr>
+
+                                                <td style="display:none;">@item.Id_utilizator</td>
+                                                <td style="display:none;">@item.Id_categorie</td>
+                                                <td>@item.DenCategorie</td>
+                                                <td>@item.Rasa</td>
+                                                <td>@item.Nume</td>
+                                                <td>@item.Gen</td>
+                                                <td>@item.Varsta</td>
+                                                <td>@item.Greutate</td>
+                                                <td>@item.Caracteristici</td>
+                                                <td style="display:none;">@item.Id_animal</td>
+                                                <td><input type="button" value="Sterge" onclick="StergeAnimal(this)" class="btn btn-primary deleteAnimal" /></td>
+                                            </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr id="randParteNou">
+                                                <td><select id="SelectCategorie" name="SelectCategorie"> </select></td>
+                                                <td><input type="text" id="txtRasa" /></td>
+                                                <td><input type="text" id="txtNume" /></td>
+                                                <td><input type="text" id="txtGen" style="width:50px" /></td>
+                                                <td><input type="text" id="txtVarsta" style="width:50px" /></td>
+                                                <td><input type="text" id="txtGreutate" style="width:50px" /></td>
+                                                <td><input type="text" id="txtCaracteristici" /></td>
+                                                <td><input type="button" id="btnAdd" value="Adauga" class="btn btn-primary" /></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+                </div>
+            <div class="modal-footer">
+                <div class="row">
+                    <button type="button" class="btn btn-primary pull-left" data-dismiss="modal">Renunță</button>
+                    <input type="submit" id="editeaza_reteta" value="Salveaza modificari" class="btn btn-primary  save-modal pull-right" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div id="newIngredientDiv" class="modal" data-backdrop="static" data-keyboard="false" role="dialog">
+
+</div>
+
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+<script>
+    $(document).ready(function () {       
+        GetCategorie();
+    });
+
+    $("body").on("click", "#btnAdd", function () {
+        var valCategorie = $('#SelectCategorie option:selected').text();
+        var valCategorieId = $('#SelectCategorie').val();
+        var txtRasa = $("#txtRasa");
+        var txtNume = $("#txtNume");
+        var txtGen = $("#txtGen");
+        var txtVarsta = $("#txtVarsta");
+        var txtGreutate = $("#txtGreutate");
+        var txtCaracteristici = $("#txtCaracteristici");
+        var tBody = $("#tblAnimale > TBODY")[0];
+        var row = tBody.insertRow(-1);
+        var cell = $(row.insertCell(-1));
+        cell.html(0);
+        cell.hide();
+        var cell = $(row.insertCell(-1));
+        cell.html(valCategorieId);
+        cell.hide();
+        var cell = $(row.insertCell(-1));
+        cell.html(valCategorie);
+        cell = $(row.insertCell(-1));
+        cell.html(txtRasa.val());
+        cell = $(row.insertCell(-1));
+        cell.html(txtNume.val());
+        cell = $(row.insertCell(-1));
+        cell.html(txtGen.val());
+        cell = $(row.insertCell(-1));
+        cell.html(txtVarsta.val());
+        cell = $(row.insertCell(-1));
+        cell.html(txtGreutate.val());
+        cell = $(row.insertCell(-1));
+        cell.html(txtCaracteristici.val());
+        cell = $(row.insertCell(-1));
+        var btnRemove = $("<input />");
+        btnRemove.attr("type", "button");
+        btnRemove.attr("class", "btn btn-primary deleteAnimal");
+        btnRemove.attr("onclick", "StergeAnimal(this);");
+        btnRemove.val("Sterge");
+        cell.append(btnRemove);
+    });
+
+    function GetCategorie() {
+        var appendId = $("#SelectCategorie");
+        loadingMessage = 'Alegeti tipul';
+        appendId.html('<option>' + loadingMessage + '</option>');
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/Admin/GetCategorie",
+            data: {
+                defaultEntityId: appendId.attr("defaultvalue")
+            },
+            success: function (data) {
+                appendId.empty();
+                appendId.html('<option value="">Alege un tip</option>');
+                $.each(data, function (i) {
+                    var sel = data[i].Selected == true ? "selected" : "";
+                    var opt = ($('<option ' + sel + '></option>').val(data[i].Value).html(data[i].Text));
+                    appendId.append(opt);
+                });
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Eroare la obtinerea categoriilor.');
+            }
+        });
+    }
+
+    $("body").on("click", "#editeaza_reteta", function () {    
+            var animale = new Array();
+            $("#tblAnimale TBODY TR").each(function () {
+                var row = $(this);
+                var animal = {};
+                animal.Id_utilizator = row.find("TD").eq(0).html();
+                animal.Id_categorie = row.find("TD").eq(1).html();
+                animal.Rasa = row.find("TD").eq(3).html();
+                animal.Nume = row.find("TD").eq(4).html();
+                animal.Gen = row.find("TD").eq(5).html();
+                animal.Varsta = row.find("TD").eq(6).html();
+                animal.Greutate = row.find("TD").eq(7).html();
+                animal.Caracteristici = row.find("TD").eq(8).html();
+                animal.Id_animal = row.find("TD").eq(9).html();
+                animale.push(animal);
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/Admin/AdaugaAnimale",
+                data: JSON.stringify(animale),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (r) {
+                    alert(r + " s-au inserat randurile");
+                }
+            });
+        });
+
+    function StergeAnimal(button) {
+        var row = $(button).closest("TR");
+        var name = $("TD", row).eq(0).html();
+        if (confirm("Doriti sa stergeti?: " + name)) {
+            var table = $("#tblAnimale")[0];
+            table.deleteRow(row[0].rowIndex);
+        }
+    };
+
+
+</script>

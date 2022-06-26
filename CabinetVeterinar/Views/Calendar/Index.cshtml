@@ -1,0 +1,280 @@
+﻿@model CabinetVeterinar.Models.Utilizator
+@{
+    ViewBag.Title = "Programari";
+
+}
+
+<h2>Rezervari</h2>
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.css" rel="stylesheet" />
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.print.css" rel="stylesheet" media="print" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var events = [];
+            var selectedEvent = null;
+            FetchEventAndRenderCalendar();
+            function FetchEventAndRenderCalendar() {
+                ProgramariExistente();
+            }
+
+            function Generatecalendar(events) {
+                $('#calendar').fullCalendar('destroy');
+                $('#calendar').fullCalendar({
+                    contentHeight: 400,
+                    defaultDate: new Date(),
+                    timeFormat: 'h(:mm)a',
+                    header: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'month, basicWeek, basicDay, agenda'
+                    },
+                    buttonIcons: true,     
+                    weekNumbers: true,
+                    navLinks: true,        
+                    eventLimit: true,
+                    eventColor: '#801a06',
+                    eventOverlap: false,
+                    events: events,                   
+                    eventClick: function (calEvent, jsEvent, view) {
+                        selectedEvent = calEvent;
+                        $('#myModal #eventTitle').text(calEvent.title);
+                        var $description = $('<div/>');
+                        $description.append($('<p/>').html('<b>Start programare:</b>' + calEvent.start.format("DD-MMM-YYYY HH:mm:ss")));
+                        if (calEvent.end != null) {
+                            $description.append($('<p/>').html('<b>End programare:</b>' + calEvent.end.format("DD-MMM-YYYY HH:mm:ss")));
+                        }
+                        $description.append($('<p/>').html('<b>Detalii:</b>' + calEvent.descriere));
+                        $('#myModal #pDetails').empty().html($description);
+
+                        $('#myModal').modal();
+                    },
+                    selectable: true,
+                    select: function (start, end) {
+                        selectedEvent = {
+                            id_programare: 0,
+                            id_Veterinar: 0,
+                            Id_utilizator:0,                                                   
+                            start: start.format('DD/MM/YYYY HH:mm:ss'),
+                            end: end.format('DD/MM/YYYY HH:mm:ss'),
+                            descriere: '' 
+                        };
+                        openAddEditForm();
+                        $('#calendar').fullCalendar('unselect');
+                    },
+                    editable: true,
+                    eventDrop: function (event) {
+                        var data = {
+                            id_programare: event.Id_programare,
+                            start: event.start.format('DD/MM/YYYY HH:mm:ss'),
+                            end: event.end != null ? event.end.format('DD/MM/YYYY HH:mm:ss') : null,
+                            descriere: event.Descriere
+                        };
+                        SaveEvent(data);
+                    }
+                })
+            }
+
+            $('#btnEdit').click(function () {
+                openAddEditForm();
+            })
+            $('#btnDelete').click(function () {
+                if (selectedEvent != null && confirm('Sigur doriti sa stergeti inregistrarea?')) {
+                    $.ajax({
+                        type: "POST",
+                        url: '/Rezervare/StergereRezervare',
+                        data: { idRezervare: 1 },
+                        success: function (data) {
+                            if (data.status) {
+                                FetchEventAndRenderCalendar();
+                                $('#myModal').modal('hide');
+                            }
+                        },
+                        error: function () {
+                            alert('Failed');
+                        }
+                    })
+                }
+            })
+            $('#dtp1,#dtp2').datetimepicker({
+                format: 'DD/MM/YYYY HH:mm A'
+            });
+
+            function openAddEditForm() {
+              
+                if (selectedEvent != null) {
+                    $('#hdIdProgramare').val(selectedEvent.id_programare);
+                    $('#hdIdVeterinar').val(selectedEvent.id_veterinar);
+                    $('#cboClienti').val(selectedEvent.id_utilizator);
+                    $('#txtStart').val(selectedEvent.start);
+                    $('#txtEnd').val(selectedEvent.end != null ? selectedEvent.end : '');
+                    $('#txtDescriere').val(selectedEvent.descriere);
+
+                }
+                $('#myModal').modal('hide');
+                $('#myModalSave').modal();
+            }
+            $('#btnSave').click(function () {
+                if ($('#txtStart').val().trim() == "") {
+                    alert('Data de start programare e necesar a fi completata!');
+                    return;
+                }
+                if ($('#txtEnd').val().trim() == "") {
+                    alert('Data de final programare e necesar a fi completata!');
+                    return;
+                }
+                
+                var data = {                 
+                    id_utilizator: $('#Clienti').val().trim(),
+                    id_Veterinar: $('#hiddenVeterinarID').val().trim(),
+                    start: $('#txtStart').val().trim(),
+                    end: $('#txtEnd').val().trim(),
+                    Descriere: $('#txtDescriere').val()
+                }
+                SaveEvent(data);
+            })
+            function SaveEvent(data) {
+                $.ajax({
+                    type: "POST",
+                    url: '/Calendar/SalveazaProgramare',
+                    data: data,
+                    success: function (data) {
+                        if (data.status) {
+                            FetchEventAndRenderCalendar();
+                            $('#myModalSave').modal('hide');
+                        }
+                    },
+                    error: function () {
+                        alert('Failed');
+                    }
+                })
+            }
+
+
+            function ProgramariExistente() {
+                
+                var evenimente = [];
+                $.ajax({
+                    type: "GET",
+                    url: "/Calendar/GetProgramari",
+                    data: {
+                        idVet: $('#hiddenVeterinarID').val()
+                    },
+                    success: function (data) {
+                       
+                        $.each(data, function (i, v) {   
+                          
+                            evenimente.push({                                
+                                id_programare: v.Id_programare,                               
+                                start: moment(v.Start).format('YYYY-MM-DDThh:mm:ss'),
+                                end: moment(v.End).format('YYYY-MM-DDThh:mm:ss'),
+                                descriere: v.descriere                              
+                            });
+
+                        })
+                        Generatecalendar(evenimente);
+                    }
+                });
+            }
+        })
+
+       
+    </script>
+}
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+        font-size: 14px;
+    }
+
+    #top {
+        background: #eee;
+        border-bottom: 1px solid #ddd;
+        padding: 0 10px;
+        line-height: 40px;
+        font-size: 12px;
+    }
+
+    #calendar {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 10px;
+    }
+</style>
+@Html.Hidden("hiddenVeterinarID", Model.Id_utilizator)
+
+<div id='calendar'></div>
+
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"><span id="eventTitle"></span></h4>
+            </div>
+            <div class="modal-body">
+                <button id="btnDelete" class="btn btn-primary btn-sm pull-right">
+                    <span class="glyphicon glyphicon-remove"></span> Anuleaza rezervare
+                </button>
+                <p id="pDetails"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModalSave" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Programare noua</h4>
+            </div>
+            <div class="modal-body" style="padding-left:30px">
+                <form class="col-md-12 form-horizontal">
+                    <div class="form-group">
+                        <label>Client</label>
+                        @Html.DropDownList("Clienti", (SelectList)ViewBag.ListaClienti, "Select client")
+
+                    </div>
+
+                    <div class="form-group" style="width:320px" >
+                        <label>Start</label>
+                        <div class="input-group date" id="dtp1">
+                            <input type="text" id="txtStart" class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group" style="width:320px">
+                        <label>End</label>
+                        <div class="input-group date" id="dtp2">
+                            <input type="text" id="txtEnd" class="form-control" />
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Detalii programare</label>
+                        <textarea id="txtDescriere" rows="3" class="form-control"></textarea>
+                    </div>
+                    <button type="button" id="btnSave" class="btn btn-primary">Salveaza</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Inchide</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

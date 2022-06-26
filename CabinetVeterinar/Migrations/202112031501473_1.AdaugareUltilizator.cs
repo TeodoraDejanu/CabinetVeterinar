@@ -1,0 +1,18 @@
+namespace CabinetVeterinar.Migrations
+{
+    using System;
+    using System.Data.Entity.Migrations;
+    
+    public partial class _1AdaugareUltilizator : DbMigration
+    {
+        public override void Up()
+        {
+            AddColumn("dbo.Utilizators", "Rol", c => c.String());
+        }
+        
+        public override void Down()
+        {
+            DropColumn("dbo.Utilizators", "Rol");
+        }
+    }
+}

@@ -1,0 +1,153 @@
+﻿@model CabinetVeterinar.Models.Fisa
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+@using (Html.BeginForm("Detalii", "Fisa", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Fisa</h4>
+        <hr />
+        @Html.HiddenFor(model => model.Id_Veterinar, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.HiddenFor(model => model.Id_Client, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.HiddenFor(model => model.Id_Animal, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.HiddenFor(model => model.Animal.Id_categorie, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.HiddenFor(model => model.Animal.Id_animal, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.HiddenFor(model => model.Animal.Id_utilizator, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.DropDownList("AnimalCompanie", (SelectList)ViewBag.ListaAnimaleDetinute, "Select animal companie")
+        <table>
+            <tr>
+                <td>Nume</td>
+                <td>@Html.EditorFor(model => model.Animal.Nume, new { htmlAttributes = new { @class = "form-control" } })</td>
+                <td>Greutate</td>
+                <td>@Html.EditorFor(model => model.Animal.Greutate, new { htmlAttributes = new { @class = "form-control" } })</td>
+                <td>Categorie</td>
+                <td>@Html.EditorFor(model => model.Animal.DenCategorie, new { htmlAttributes = new { @class = "form-control" } })</td>
+
+            </tr>
+            <tr>
+                <td>Varsta</td>
+                <td>@Html.EditorFor(model => model.Animal.Varsta, new { htmlAttributes = new { @class = "form-control" } })</td>
+                <td>Rasa</td>
+                <td>@Html.EditorFor(model => model.Animal.Rasa, new { htmlAttributes = new { @class = "form-control" } })</td>
+                <td>Gen</td>
+                <td>@Html.EditorFor(model => model.Animal.Gen, new { htmlAttributes = new { @class = "form-control" } })</td>
+            </tr>
+        </table>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Numar_Fisa, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Numar_Fisa, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Numar_Fisa, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Vaccinat, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Vaccinat)
+                    @Html.ValidationMessageFor(model => model.Vaccinat, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Produs_Vaccin, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Produs_Vaccin, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Produs_Vaccin, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Deparazitat_Intern, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Deparazitat_Intern)
+                    @Html.ValidationMessageFor(model => model.Deparazitat_Intern, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Produs_DeparazitareI, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Produs_DeparazitareI, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Produs_DeparazitareI, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Deparazitat_Extern, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="checkbox">
+                    @Html.EditorFor(model => model.Deparazitat_Extern)
+                    @Html.ValidationMessageFor(model => model.Deparazitat_Extern, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Produs_DeparazitareE, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Produs_DeparazitareE, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Produs_DeparazitareE, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Observatii, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Observatii, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Observatii, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Salveaza fisa" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script>
+    $("#AnimalCompanie").change(function () {
+        val = $('#AnimalCompanie :selected').val();
+        // console.log(val);
+        //console.log($('#Camere :selected').text());
+        $('#hiddenId_animal').val($('#AnimalCompanie :selected').text());
+        $.ajax({
+            type: "GET",
+            url: "/Fisa/GetDateAnimal",
+            data: {
+                idAnimal: val,
+            },
+            success: function (data) {
+               // alert('intra aici');
+                $('#Animal_Nume').val(data.Nume);
+                $('#Animal_Greutate').val(data.Greutate);
+                $('#Animal_DenCategorie').val(data.DenCategorie);
+                $('#Animal_Varsta').val(data.Varsta);
+                $('#Animal_Rasa').val(data.Rasa);
+                $('#Animal_Gen').val(data.Gen);
+                $('#Animal_Id_animal').val(data.Id_Animal);
+                $('#Id_Animal').val(data.Id_Animal);
+                $('#Animal_Id_categorie').val(data.Id_Categorie);
+                $('#Animal_Id_utilizator').val(data.Id_Utilizator);
+            },           
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr);
+            }
+        })
+    });
+</script>

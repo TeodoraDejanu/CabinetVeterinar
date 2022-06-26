@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewBag.Title = "PrezentareVeterinari";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>PrezentareVeterinari</h2> 
+<p>Prezentare a veterinarilor nostri</p>
+<table class="table">
+    <tr>
+        <td>Nume</td>
+        <td>Prenume</td>
+        <td>Email</td>
+        <td>Telefon</td>
+        <td>Specializari</td>
+        <td>Ani vechime</td>
+        <td>Descriere</td>
+        <td>Fotografie</td>
+        <td>Motto</td>
+    </tr>
+    @if(ViewBag.Utilizatori != null)
+            {
+                foreach(CabinetVeterinar.Models.Utilizator item in ViewBag.Utilizatori)
+                {
+<tr>
+    <td> @item.Nume </td>
+    <td> @item.Prenume </td>
+    <td> @item.Email </td>
+    <td> @item.Telefon </td>
+    <td> @item.Specializari </td>
+    <td> @item.Ani_experienta  </td>
+    <td> @item.Descriere </td>
+    <td> <img src="/Home/PreluareImagine/@item.Id_utilizator" height=200 width=200/> </td>
+    <td> @item.Motto </td>
+
+</tr>
+                }
+            }
+</table>
+

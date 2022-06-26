@@ -1,0 +1,26 @@
+﻿@model CabinetVeterinar.Models.Utilizator
+
+@{
+    ViewBag.Title = "Autentificare cabinet veterinar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Autentificare</h2>
+@using (Html.BeginForm("Autentificare", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    <table class="table">
+        <tr>
+            @Html.DisplayNameFor(model => model.Username)
+            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+        </tr>
+        <tr>
+            @Html.DisplayNameFor(model => model.Parola)
+            @Html.EditorFor(model => model.Parola, new { htmlAttributes = new { @class = "form-control" } })
+        </tr>
+    </table>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Autentificare" />
+        </div>
+    </div>
+}

@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Panou administrare</h2>
+<div class="col-lg-8 col-sm-6 top10">
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Utilizatori</h4>
+
+        </div>
+        <div class="panel-body">
+            <table class="table">
+                <tr>
+                    <th>
+                        Username
+                    </th>
+                    <th>
+                        Nume
+                    </th>
+                    <th>
+                        Prenume
+                    </th>
+                    <th>
+                        Rol
+                    </th>
+                    <th>Actiune</th>
+                </tr>
+                @if (ViewBag.Utilizatori != null)
+                {
+                    foreach (CabinetVeterinar.Models.Utilizator user in ViewBag.Utilizatori)
+                    {
+                        <tr>
+                            <td>
+                                @user.Username
+                            </td>
+                            <td>
+                                @user.Nume
+                            </td>
+                            <td>
+                                @user.Prenume
+                            </td>
+                            <td>
+                                @user.Rol
+                            </td>
+                            <td>
+                                @if (user.Rol == "CLIENT")
+                                {
+                                    <div class="btn-group" role="group">
+                                        <input id="edit-div" type="button" onclick="return false;"
+                                               data-target="#newEditDiv" data-backdrop="static"
+                                               data-modal-url="@Url.Action("Edit", "Admin", new { id = user.Id_utilizator })"
+                                               value="Editeaza Client" class="btn btn-primary" />
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+            <div class="btn-group pull-right" style="padding-left: 7.5px; padding-right: 200px;">
+                @Html.ActionLink("Adauga client", "AdaugaUtilizator", null, new { @class = "btn btn-primary" })
+            </div>
+            <div class="btn-group pull-right">
+                @Html.ActionLink("Adauga veterinar", "AdaugaVeterinar", null, new { @class = "btn btn-primary" })
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="newEditDiv" class="modal" data-backdrop="static" data-keyboard="false" role="dialog" aria-labelledby="">
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js" type="text/javascript"></script>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Scripts/bootstrap.js"></script>
+
+
+<script type="text/javascript">
+    $(document).on("click", "[data-modal-url]", function () {
+        $.ajax({
+            url: $(this).data("modal-url"),
+            data: $(this).data("modal-data"),
+            context: $($(this).data("target"))[0],
+            success: function (data) {           
+                $(this).html(data).modal();
+            }
+        });
+        return false;
+    });
+</script>
+

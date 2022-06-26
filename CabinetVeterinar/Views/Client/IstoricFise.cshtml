@@ -1,0 +1,78 @@
+﻿@model IEnumerable<CabinetVeterinar.Models.Fisa>
+
+@{
+    ViewBag.Title = "IstoricFise";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>IstoricFise</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Animal.Nume)
+        </th>
+       
+       
+        <th>
+            @Html.DisplayNameFor(model => model.Numar_Fisa)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Vaccinat)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Produs_Vaccin)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Deparazitat_Intern)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Produs_DeparazitareI)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Deparazitat_Extern)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Produs_DeparazitareE)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Observatii)
+        </th>
+ 
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Animal.Nume)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Numar_Fisa)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Vaccinat)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Produs_Vaccin)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Deparazitat_Intern)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Produs_DeparazitareI)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Deparazitat_Extern)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Produs_DeparazitareE)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Observatii)
+        </td>
+     
+    </tr>
+}
+
+</table>

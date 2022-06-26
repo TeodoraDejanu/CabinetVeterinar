@@ -1,0 +1,45 @@
+﻿@model CabinetVeterinar.Models.Utilizator
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Veterinar</h2>
+<div style="width: 100%;background-color: #B5C8DB;height:400px;">
+    <div style="width: 60%;float:left;border:double;border-color:blue;height:400px">
+        <table>
+            <tr>
+                <td><img src="/Veterinar/PreluareImagine/@Model.Id_utilizator" height="395"; width="350" /> </td>
+       <td>
+           <table>
+               <tr><td>@Model.Nume</td></tr>
+
+               <tr><td>@Model.Prenume</td></tr>
+               <tr><td>@Model.Specializari</td></tr>
+           </table>
+       </td>
+            </tr>
+        </table>
+    </div>
+    <div style="width: 40%;float:left;border:double;border-color:blue;height:400px">
+        <div class="buttonProgramare btn-mare" style="padding-top:100px;padding-right:50px;height:170px;border:double">
+            @Html.ActionLink("Adaugare programare", "Index", "Calendar", null, new { @class = "buttonProgramare btn-mare" })
+        </div>
+        <div class="buttonProgramare btn-mare" style="padding-top:100px;padding-right:50px;height:170px;border:double">
+            @Html.ActionLink("Lista programari azi", "Index", "Fisa", null, new { @class = "buttonProgramare btn-mare" })
+        </div>
+    </div>
+</div>
+<div style="width: 100%;background-color:#B5C8DB;height:800px">
+
+</div>
+<style type="text/css">
+    .buttonProgramare {
+        background-color: #A9A9B8;
+        color: black;
+        padding: 10px;
+        border-radius: 10px;
+        margin: 10px
+    }
+    .btn-mare{width:350px;height:350px}
+</style>
